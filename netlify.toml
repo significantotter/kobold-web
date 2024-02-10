@@ -2,3 +2,6 @@
   from = "/authorize/*"
   to = "/.netlify/functions/oauth"
   status = 200
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
