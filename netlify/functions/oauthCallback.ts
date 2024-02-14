@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { db } from "./utils/db";
 import { Handler } from "@netlify/functions";
 
@@ -12,6 +12,7 @@ export const handler: Handler = async (event) => {
 		},
 		body: "redirecting to application...",
 	};
+	let axiosResponse: AxiosResponse<any, any> | null = null;
 	try {
 		if (!event.queryStringParameters) {
 			return {
@@ -24,7 +25,7 @@ export const handler: Handler = async (event) => {
 
 		// wanderer's guide uses a non-standard header auth method
 		// so we can't continue to use the simple-oauth2 module here
-		const response = await axios({
+		axiosResponse! = await axios({
 			url: `https://wanderersguide.app/api/oauth2/token?code=${code}&client_id=${process.env.WG_CLIENT_ID}`,
 			method: "post",
 			headers: {
@@ -40,11 +41,11 @@ export const handler: Handler = async (event) => {
 		await db
 			.insertInto("wgAuthToken")
 			.values({
-				charId: response.data.char_id,
-				accessToken: response.data.access_token,
-				accessRights: response.data.access_rights,
-				expiresAt: response.data.expires_at,
-				tokenType: response.data.token_type,
+				charId: axiosResponse.data.char_id,
+				accessToken: axiosResponse.data.access_token,
+				accessRights: axiosResponse.data.access_rights,
+				expiresAt: axiosResponse.data.expires_at,
+				tokenType: axiosResponse.data.token_type,
 			})
 			.execute();
 		redirect = {
@@ -56,6 +57,7 @@ export const handler: Handler = async (event) => {
 			body: "redirecting to application...",
 		};
 	} catch (err) {
+		if (axiosResponse) console.warn(axiosResponse.data);
 		if (err instanceof Error) console.error(err.message);
 		console.error(err);
 	} finally {
