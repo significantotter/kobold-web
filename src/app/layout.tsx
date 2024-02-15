@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme";
 import { Metadata } from "next";
+import HeaderNavTabs from "@/components/NavTabs/HeaderNavTabs";
 
 export const metadata: Metadata = {
 	title: "Kobold Discord Bot",
@@ -18,6 +19,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
 					<ThemeProvider theme={theme}>
 						{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 						<CssBaseline />
+						<HeaderNavTabs />
 						{props.children}
 					</ThemeProvider>
 				</AppRouterCacheProvider>
