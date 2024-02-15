@@ -53,7 +53,7 @@ export const handler: Handler = async (event) => {
 				charId: axiosResponse.data.char_id,
 				accessToken: axiosResponse.data.access_token,
 				accessRights: axiosResponse.data.access_rights,
-				expiresAt: axiosResponse.data.expires_at,
+				expiresAt: expires_at,
 				tokenType: axiosResponse.data.token_type,
 			})
 			.execute();
