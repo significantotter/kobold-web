@@ -37,6 +37,15 @@ export const handler: Handler = async (event) => {
 			},
 			responseType: "json",
 		});
+		let expires_at = new Date();
+
+		if (axiosResponse.data.expires_in) {
+			expires_at.setSeconds(
+				expires_at.getSeconds() + axiosResponse.data.expires_in
+			);
+		} else if (axiosResponse.data.expires_at) {
+			expires_at = new Date(axiosResponse.data.expires_at);
+		}
 
 		await db
 			.insertInto("wgAuthToken")
