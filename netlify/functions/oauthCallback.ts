@@ -69,8 +69,6 @@ export const handler: Handler = async (event) => {
 		if (axiosResponse) console.warn(axiosResponse.data);
 		if (err instanceof Error) console.error(err.message);
 		console.error(err);
-	} finally {
-		await db.destroy();
 	}
 	return redirect;
 };
